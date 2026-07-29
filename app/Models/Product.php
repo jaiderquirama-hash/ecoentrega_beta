@@ -34,7 +34,7 @@ class Product extends Model
 
     public function cartDetails()
     {
-        return $this->hasMany(cartdetail::class, 'id_product');
+        return $this->hasMany(CartDetail::class, 'id_product');
     }
 
     public function reviews()
@@ -47,4 +47,3 @@ class Product extends Model
         return $this->hasMany(RequestDetail::class, 'id_product');
     }
 }
-

@@ -10,16 +10,7 @@ class Request extends Model
     protected $primaryKey = 'id_request';
     public $timestamps = false;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'size',
-        'color',
-        'max_price',
-        'status',
-        'request_date',
-        'id_user'
-    ];
+    protected $fillable = ['title', 'description', 'size', 'color', 'max_price', 'status', 'request_date', 'id_user'];
 
     public function user()
     {

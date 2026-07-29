@@ -8,6 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('products')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->foreign('id_user')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+            });
+
+            return;
+        }
+
         Schema::create('products', function (Blueprint $table) {
             $table->id('id_product');
 
@@ -17,8 +28,8 @@ return new class extends Migration
             $table->string('size');
             $table->string('garment_condition');
             $table->string('color');
-            $table->string('image');
-            $table->dateTime('publication_date');
+            $table->string('image')->nullable();
+            $table->dateTime('publication_date')->useCurrent();
 
             $table->unsignedBigInteger('id_category');
             $table->unsignedBigInteger('id_user');
@@ -29,7 +40,7 @@ return new class extends Migration
                   ->onDelete('cascade');
 
             $table->foreign('id_user')
-                  ->references('id_user')
+                  ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
         });

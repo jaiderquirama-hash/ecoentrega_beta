@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('id_order');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_payment')->nullable()->unique();
+            $table->decimal('total', 10, 2);
+            $table->string('order_status')->default('pending');
+            $table->dateTime('order_date')->useCurrent();
+
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_payment')->references('id_payment')->on('payments')->nullOnDelete();
         });
     }
 

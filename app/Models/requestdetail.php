@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,13 +10,7 @@ class RequestDetail extends Model
     protected $primaryKey = 'id_request_detail';
     public $timestamps = false;
 
-    protected $fillable = [
-        'id_request',
-        'id_product',
-        'quantity',
-        'message',
-        'created_at'
-    ];
+    protected $fillable = ['id_request', 'id_product', 'quantity', 'message'];
 
     public function request()
     {

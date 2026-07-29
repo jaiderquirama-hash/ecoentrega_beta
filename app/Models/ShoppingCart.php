@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,10 +10,7 @@ class ShoppingCart extends Model
     protected $primaryKey = 'id_cart';
     public $timestamps = false;
 
-    protected $fillable = [
-        'creation_date',
-        'id_user'
-    ];
+    protected $fillable = ['creation_date', 'id_user'];
 
     public function user()
     {

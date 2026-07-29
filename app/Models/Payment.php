@@ -16,4 +16,9 @@ class Payment extends Model
         'payment_date',
         'amount'
     ];
+
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'id_payment');
+    }
 }

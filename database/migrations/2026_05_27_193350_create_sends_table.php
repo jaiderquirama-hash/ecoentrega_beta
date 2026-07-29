@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('send_date');
 
             $table->foreign('id_user')
-                  ->references('id_user')
+                  ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
 

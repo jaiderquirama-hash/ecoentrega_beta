@@ -10,12 +10,7 @@ class CartDetail extends Model
     protected $primaryKey = 'id_cart_detail';
     public $timestamps = false;
 
-    protected $fillable = [
-        'quantity',
-        'subtotal',
-        'id_cart',
-        'id_product'
-    ];
+    protected $fillable = ['quantity', 'subtotal', 'id_cart', 'id_product'];
 
     public function shoppingCart()
     {

@@ -10,13 +10,7 @@ class Review extends Model
     protected $primaryKey = 'id_review';
     public $timestamps = false;
 
-    protected $fillable = [
-        'comment',
-        'rating',
-        'review_date',
-        'id_user',
-        'id_product'
-    ];
+    protected $fillable = ['comment', 'rating', 'review_date', 'id_user', 'id_product'];
 
     public function user()
     {
