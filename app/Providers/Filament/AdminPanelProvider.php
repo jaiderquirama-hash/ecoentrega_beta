@@ -13,7 +13,12 @@ use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\CartDetails\CartDetailResource;
+use App\Filament\Resources\Clients\ClientResource;
+use App\Filament\Resources\OrderDetails\OrderDetailResource;
+use App\Filament\Resources\Orders\OrderResource;
 use App\Filament\Resources\Products\ProductResource;
+use App\Filament\Resources\ShoppingCarts\ShoppingCartResource;
 use App\Filament\Resources\Users\UserResource;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -36,7 +41,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->resources([
                 CategoryResource::class,
+                ClientResource::class,
+                ShoppingCartResource::class,
+                CartDetailResource::class,
                 ProductResource::class,
+                OrderResource::class,
+                OrderDetailResource::class,
                 UserResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

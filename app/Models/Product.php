@@ -46,4 +46,9 @@ class Product extends Model
     {
         return $this->hasMany(RequestDetail::class, 'id_product');
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'id_product');
+    }
 }
