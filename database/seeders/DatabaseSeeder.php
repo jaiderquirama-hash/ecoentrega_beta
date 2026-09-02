@@ -15,11 +15,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Usuario Administrador
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@ecoentrega.com'],
+            [
+                'name' => 'Administrador EcoEntrega',
+                'password' => bcrypt('password123'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Usuario Cliente de prueba
+        $user = User::firstOrCreate(
+            ['email' => 'user@ecoentrega.com'],
+            [
+                'name' => 'Usuario Cliente',
+                'password' => bcrypt('password123'),
+                'role' => 'user',
+            ]
+        );
+
+        // Crear registro en la tabla clients para el usuario cliente
+        \App\Models\Client::firstOrCreate(
+            ['id_user' => $user->id],
+            [
+                'phone' => '3001234567',
+                'address' => 'Calle Principal # 123',
+            ]
+        );
     }
 }

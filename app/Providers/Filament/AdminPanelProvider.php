@@ -36,8 +36,15 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Ver Sitio Web')
+                    ->url('/')
+                    ->icon('heroicon-o-globe-alt')
+                    ->sort(-1),
             ])
             ->resources([
                 CategoryResource::class,
