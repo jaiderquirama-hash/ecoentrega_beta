@@ -38,14 +38,6 @@ class ClientForm
                         ->label('Contraseña')
                         ->password()
                         ->required(),
-                    Select::make('role')
-                        ->label('Rol')
-                        ->options([
-                            'user' => 'Usuario / Cliente',
-                            'admin' => 'Administrador',
-                        ])
-                        ->default('user')
-                        ->required(),
                 ])
                 ->unique(table: 'clients', column: 'id_user', ignoreRecord: true),
             TextInput::make('document_number')->label('Documento')->maxLength(255)->unique(ignoreRecord: true),

@@ -10,7 +10,18 @@ class Order extends Model
     protected $primaryKey = 'id_order';
     public $timestamps = false;
 
-    protected $fillable = ['id_user', 'id_client', 'id_payment', 'total', 'order_status', 'order_date'];
+    protected $fillable = [
+        'id_user',
+        'id_client',
+        'id_payment',
+        'shipping_address',
+        'shipping_phone',
+        'payment_method',
+        'total',
+        'order_status',
+        'notes',
+        'order_date',
+    ];
 
     public function user()
     {

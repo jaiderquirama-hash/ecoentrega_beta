@@ -19,12 +19,20 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('role')
-                    ->label('Rol')
+                TextColumn::make('roles.name')
+                    ->label('Rol (Shield)')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => $state === 'admin' ? 'Administrador' : 'Usuario')
-                    ->color(fn (string $state): string => $state === 'admin' ? 'warning' : 'gray')
-                    ->sortable(),
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'super_admin' => '1: Superadmin',
+                        'cliente' => '2: Cliente',
+                        default => $state ?? 'Sin Rol',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'super_admin' => 'danger',
+                        'cliente' => 'success',
+                        default => 'gray',
+                    })
+                    ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),

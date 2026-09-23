@@ -20,9 +20,12 @@ Route::get('/', function () {
         ->paginate(12)
         ->withQueryString();
 
+    $cartCount = auth()->check() ? (auth()->user()->shoppingCart?->cartDetails()->sum('quantity') ?? 0) : 0;
+
     return view('welcome', [
         'categories' => Category::query()->orderBy('category_name')->get(),
         'products' => $products,
+        'cartCount' => $cartCount,
     ]);
 })->name('home');
 
@@ -37,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/mi-cuenta', [AuthController::class, 'account'])->name('account');
     Route::get('/carrito', [AuthController::class, 'cart'])->name('cart');
     Route::post('/carrito/productos/{product}', [AuthController::class, 'addToCart'])->name('cart.add');
+    Route::post('/carrito/actualizar/{detail}', [AuthController::class, 'updateCartQuantity'])->name('cart.update');
     Route::delete('/carrito/detalles/{detail}', [AuthController::class, 'removeFromCart'])->name('cart.remove');
+    Route::get('/checkout/{product?}', [AuthController::class, 'showCheckout'])->name('checkout.show');
+    Route::post('/checkout', [AuthController::class, 'processCheckout'])->name('checkout.process');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

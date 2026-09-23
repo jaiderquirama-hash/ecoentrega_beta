@@ -23,13 +23,13 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->required(),
-                Select::make('role')
-                    ->label('Rol')
-                    ->options([
-                        'admin' => 'Administrador',
-                        'user' => 'Usuario',
-                    ])
-                    ->default('user')
+                Select::make('roles')
+                    ->label('Rol del Sistema (Shield)')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->helperText('Selecciona: super_admin (Control total del panel) o cliente (Tienda web)')
                     ->required(),
             ]);
     }

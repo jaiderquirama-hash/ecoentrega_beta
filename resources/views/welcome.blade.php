@@ -748,7 +748,7 @@
 
             @auth
                 {{-- Usuario autenticado --}}
-                @if (method_exists(auth()->user(), 'canAccessPanel') && auth()->user()->canAccessPanel(app(\Filament\Panel::class)))
+                @if (auth()->user()->isSuperAdmin())
                     <a
                         href="{{ url('/admin') }}"
                         class="nav-admin"
@@ -757,7 +757,13 @@
                     </a>
                 @endif
 
-                {{-- Cuenta pública, si existe la ruta --}}
+                <a
+                    href="{{ route('cart') }}"
+                    class="nav-account"
+                >
+                    🛒 Mi carrito ({{ $cartCount ?? 0 }})
+                </a>
+
                 @if (Route::has('account'))
                     <a
                         href="{{ route('account') }}"
@@ -767,21 +773,16 @@
                     </a>
                 @endif
             @else
-                {{-- IMPORTANTE:
-                     El login ahora apunta al panel de Filament --}}
                 <a
-                    href="{{ url('/admin/login') }}"
-                    class="nav-register"
+                    href="{{ route('login') }}"
+                    class="nav-login"
                 >
                     Iniciar sesión
                 </a>
 
-                {{-- Registro de Filament.
-                     Solo funcionará si el registro está habilitado
-                     en tu PanelProvider. --}}
                 <a
-                    href="{{ url('/admin/register') }}"
-                    class="nav-login"
+                    href="{{ route('register') }}"
+                    class="nav-register"
                 >
                     Registrarse
                 </a>
@@ -791,6 +792,45 @@
 </header>
 
 <main>
+
+    {{-- Banner de pedido exitoso y alertas --}}
+    @if(session('order_success'))
+        <div style="max-width:1280px; margin:24px auto 0; padding:0 32px;">
+            <div style="background:#ecfdf5; border:2px solid #059669; padding:24px 28px; border-radius:18px; box-shadow:0 8px 30px rgba(5,150,105,0.15); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                <div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:32px;">🎉</span>
+                        <h2 style="margin:0; color:#064e3b; font-size:22px; font-weight:800;">¡Tu compra se ha realizado con éxito!</h2>
+                    </div>
+                    <p style="margin:8px 0 0; color:#065f46; font-size:15px; font-weight:600;">
+                        Pedido <strong>#{{ session('order_success')['id'] }}</strong> registrado por un valor de <strong>${{ session('order_success')['total'] }}</strong>.
+                        Se enviará a: <strong>{{ session('order_success')['address'] }}</strong> (Método: {{ session('order_success')['payment_method'] }}).
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ route('account') }}" style="background:#059669; color:#fff; padding:12px 20px; border-radius:10px; font-weight:700; text-decoration:none; font-size:14px; box-shadow:0 4px 12px rgba(5,150,105,0.3); display:inline-block;">
+                        Ver en Mis Pedidos →
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div style="max-width:1280px; margin:20px auto 0; padding:0 32px;">
+            <div style="background:#dcfce7; color:#166534; padding:14px 20px; border-radius:12px; font-weight:600; border:1px solid #bbf7d0;">
+                {{ session('success') }}
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div style="max-width:1280px; margin:20px auto 0; padding:0 32px;">
+            <div style="background:#fee2e2; color:#991b1b; padding:14px 20px; border-radius:12px; font-weight:600; border:1px solid #fecaca;">
+                ⚠️ {{ session('error') }}
+            </div>
+        </div>
+    @endif
 
     {{-- HERO --}}
     <section class="hero">
@@ -970,7 +1010,11 @@
                             @endif
 
 
-                            @if ($product->garment_condition)
+                            @if ($product->stock <= 0)
+                                <span class="condition" style="background:#fee2e2; color:#b91c1c;">
+                                    Agotado
+                                </span>
+                            @elseif ($product->garment_condition)
 
                                 <span class="condition">
                                     {{ $product->garment_condition }}
@@ -1007,16 +1051,33 @@
 
                                 </div>
 
-                                {{-- Este botón actualmente no navega.
-                                     Déjalo así hasta que tengas una ruta
-                                     de detalle del producto. --}}
-                                <button
-                                    type="button"
-                                    class="product-button"
-                                    onclick="alert('Detalle del producto próximamente.')"
-                                >
-                                    Ver
-                                </button>
+                                <div style="display:flex; gap:6px; align-items:center;">
+                                    @if ($product->stock > 0)
+                                        <form method="POST" action="{{ route('cart.add', $product) }}" style="margin:0;">
+                                            @csrf
+                                            <button
+                                                type="submit"
+                                                class="product-button"
+                                                title="Agregar al carrito"
+                                                style="padding:9px 12px; font-size:15px; background:#ecfdf5; border-color:#059669; color:#065f46;"
+                                            >
+                                                🛒
+                                            </button>
+                                        </form>
+
+                                        <a
+                                            href="{{ route('checkout.show', $product) }}"
+                                            class="product-button"
+                                            style="text-decoration:none; display:inline-block; background:#059669; color:#fff; border-color:#059669; padding:9px 15px; font-weight:800;"
+                                        >
+                                            Comprar
+                                        </a>
+                                    @else
+                                        <span style="display:inline-block; padding:9px 15px; font-weight:800; background:#f3f4f6; color:#9ca3af; border-radius:9px;">
+                                            Agotado
+                                        </span>
+                                    @endif
+                                </div>
 
                             </div>
 

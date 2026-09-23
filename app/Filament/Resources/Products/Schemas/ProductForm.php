@@ -29,6 +29,12 @@ class ProductForm
                     ->prefix('$')
                     ->minValue(0)
                     ->required(),
+                TextInput::make('stock')
+                    ->label('Stock')
+                    ->numeric()
+                    ->minValue(0)
+                    ->default(1)
+                    ->required(),
                 Select::make('size')
                     ->label('Talla')
                     ->options(['XS' => 'XS', 'S' => 'S', 'M' => 'M', 'L' => 'L', 'XL' => 'XL', 'Única' => 'Única'])
@@ -52,6 +58,7 @@ class ProductForm
                     ->relationship('user', 'name')
                     ->searchable()
                     ->preload()
+                    ->default(fn () => auth()->id())
                     ->required(),
                 FileUpload::make('image')
                     ->label('Imagen de la prenda')

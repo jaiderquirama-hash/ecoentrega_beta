@@ -21,6 +21,13 @@ class ProductsTable
                 TextColumn::make('category.category_name')->label('Categoría')->searchable()->sortable(),
                 TextColumn::make('user.name')->label('Vendedor')->searchable()->sortable(),
                 TextColumn::make('price')->label('Precio')->money('COP')->sortable(),
+                TextColumn::make('stock')->label('Stock')->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match (true) {
+                        $state <= 0 => 'danger',
+                        $state <= 2 => 'warning',
+                        default => 'success',
+                    }),
                 TextColumn::make('size')->label('Talla'),
                 TextColumn::make('garment_condition')->label('Estado'),
                 TextColumn::make('publication_date')->label('Publicado')->dateTime('d/m/Y')->sortable(),

@@ -12,16 +12,37 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
+use Spatie\Permission\Traits\HasRoles;
+
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->role === 'admin';
+        return $this->hasRole('super_admin');
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('super_admin');
+    }
+
+    public function isCliente(): bool
+    {
+        return $this->hasRole('cliente');
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            if (! $user->roles()->exists()) {
+                $user->assignRole('cliente');
+            }
+        });
     }
 
     public function products()
